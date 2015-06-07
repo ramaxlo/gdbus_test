@@ -1,0 +1,15 @@
+<node>
+  <interface name="com.umbocv.Test.Server">
+
+    <method name="Hello">
+      <arg direction="in" type="s" name="input_string"/>
+      <arg direction="out" type="s" name="output_string"/>
+    </method>
+
+    <signal name="StatusChanged">
+      <arg type="s" name="state"/>
+    </signal>
+
+    <property name="Name" type="s" access="read"/>
+  </interface>
+</node>
