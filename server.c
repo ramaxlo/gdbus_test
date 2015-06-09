@@ -4,6 +4,7 @@
 
 typedef enum {
 	SERVER_ERROR_TEST,
+	SERVER_ERROR_AUTH,
 } ServerError;
 
 GQuark server_error_quark(void)
@@ -12,9 +13,10 @@ GQuark server_error_quark(void)
 
 	if (!quark)
 	{
-		quark = g_quark_from_static_string("TestError");
+		quark = g_quark_from_static_string("ServerError");
 
 		g_dbus_error_register_error(quark, SERVER_ERROR_TEST, "com.umbocv.Test.Server.TestError");
+		g_dbus_error_register_error(quark, SERVER_ERROR_AUTH, "com.umbocv.Test.Server.AuthFailure");
 	}
 
 	return quark;
