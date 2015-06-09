@@ -1,5 +1,24 @@
 
 #include "test-server-generated.h"
+#define SERVER_ERROR	server_error_quark()
+
+typedef enum {
+	SERVER_ERROR_TEST,
+} ServerError;
+
+GQuark server_error_quark(void)
+{
+	static GQuark quark = 0;
+
+	if (!quark)
+	{
+		quark = g_quark_from_static_string("TestError");
+
+		g_dbus_error_register_error(quark, SERVER_ERROR_TEST, "com.umbocv.Test.Server.TestError");
+	}
+
+	return quark;
+}
 
 /* ---------------------------------------------------------------------------------------------------- */
 static TestServer *server = NULL;
@@ -9,6 +28,16 @@ static gboolean on_handle_hello(TestServer *server, GDBusMethodInvocation *invoc
 		const char *input, gpointer data)
 {
 	GString *string = NULL;
+
+	if (!g_strcmp0(input, "error"))
+	{
+		g_dbus_method_invocation_return_error(invocation,
+				SERVER_ERROR,
+				SERVER_ERROR_TEST,
+				"This is a testing error");
+
+		return TRUE;
+	}
 
 	string = g_string_new("Hello");
 	g_string_append_printf(string, " %s", input);
